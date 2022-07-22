@@ -11,3 +11,56 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.cardCont{
+  margin: auto;
+  margin-top: 100px;
+  max-width: 750px;
+  background-color:crimson;
+}
+.cardCont1{
+  display: flex;
+  margin: auto;
+  margin-top: 50px;
+  max-width: 560px;
+}
+.contener{
+  display: flex;
+  margin: auto;
+  max-width: 300px;
+}
+.navTitle{
+  color: gold;
+}
+
+.happy{
+  background-color: coral;
+}
+
+.sad{
+  background-color: blueviolet;
+  color: white;
+
+}
+
+.purposefull{
+  background-color: yellow;
+}
+
+.lonely{
+  background-color: beige;
+}
+
+.aga{
+  flex-wrap: wrap;
+}
+.anxios{
+  background-color: brown;
+  color: white;
+
+}
+
+.painfully{
+  background-color: blue;
+  color: white;
+}
