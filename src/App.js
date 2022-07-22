@@ -4,6 +4,10 @@ import Main from './components/Main';
 import React, { Component } from 'react';
 import Web3 from 'web3';
 import Mood from './abis/Mood.json'
+import MoodySwap from './abis/MoodySwap.json'
+import MoodyToken from './abis/MoodyToken.json'
+
+
 
 export default class App extends Component {
 async componentWillMount() {
@@ -16,11 +20,14 @@ async loadBlockchainData() {
 
   const accounts = await web3.eth.getAccounts()
   this.setState({ account: accounts[0] })
-
-  // const ethBalance = await web3.eth.getBalance(this.state.account)
+  
+  // const ethBalance = web3.eth.getBalance(this.state.account).then(console.log);
   // this.setState({ ethBalance })
+  let ethBalance = await web3.eth.getBalance(accounts[0])
+  this.setState({ ethBalance })
 
-  const networkId =  await web3.eth.net.getId()
+
+  const networkId = await web3.eth.net.getId()
 
   // load Mood
   const moodData = Mood.networks[networkId]
@@ -34,54 +41,55 @@ async loadBlockchainData() {
   }
 
   // Load MoodySwap
-  // const MoodySwapData = MoodySwap.networks[networkId]
-  // if(MoodySwapData) {
-  //   const moody_Swap = new web3.eth.Contract(MoodySwap.abi, MoodySwapData.address)
-  //   this.setState({ moody_Swap })
-  // } else {
-  //   window.alert('MoodySwap contract not deployed to detected network.')
-  // }
+  const MoodySwapData = MoodySwap.networks[networkId]
+  if(MoodySwapData) {
+    const moody_Swap = new web3.eth.Contract(MoodySwap.abi, MoodySwapData.address)
+    this.setState({ moody_Swap })
+  } else {
+    window.alert('MoodySwap contract not deployed to detected network.')
+  }
 
   // load token
-  // const tokenData = MoodyToken.networks[networkId]
-  // if(tokenData) {
-  //   const token = new web3.eth.Contract(MoodyToken.abi, tokenData.address)
-  //   this.setState({ token })
-  //   let tokenBalance = await token.methods.balanceOf(this.state.account).call()
-  //   this.setState({ tokenBalance: tokenBalance.toString() })
-  // } else {
-  //   window.alert('Token contract not deployed to detected network.')
-  // }
+  const tokenData = MoodyToken.networks[networkId]
+  if(tokenData) {
+    const token = new web3.eth.Contract(MoodyToken.abi, tokenData.address)
+    this.setState({ token })
+    let tokenBalance = await token.methods.balanceOf(this.state.account).call()
+    this.setState({ tokenBalance: tokenBalance.toString() })
+  } else {
+    window.alert('Token contract not deployed to detected network.')
+  }
 }
 
-async loadWeb3() {
-  if (window.ethereum) {
-    window.web3 = new Web3(window.ethereum)
-    await window.ethereum.enable()
+  async loadWeb3() {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum)
+      await window.ethereum.enable()
+    }
+    else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider)
+    }
+    else {
+      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+    }
   }
-  else if (window.web3) {
-    window.web3 = new Web3(window.web3.currentProvider)
-  }
-  else {
-    window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-  }
-}
+
 // Swap Methods
-// buyTokens = (etherAmount) => {
-//   this.setState({ loading: true })
-//   this.state.moody_Swap.methods.buyTokens().send({ value: etherAmount, from: this.state.account }).on('transactionHash', (hash) => {
-//     this.setState({ loading: false })
-//   })
-// }
+  buyTokens = (etherAmount) => {
+    this.setState({ loading: true })
+    this.state.moody_Swap.methods.buyTokens().send({ value: etherAmount, from: this.state.account }).on('transactionHash', (hash) => {
+      this.setState({ loading: false })
+    })
+  }
 
-// sellTokens = (tokenAmount) => {
-//   this.setState({ loading: true })
-//   this.state.token.methods.approve(this.state.moody_Swap.address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-//     this.state.moody_Swap.methods.sellTokens(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-//       this.setState({ loading: false })
-//     })
-//   })
-// }
+  sellTokens = (tokenAmount) => {
+    this.setState({ loading: true })
+    this.state.token.methods.approve(this.state.moody_Swap._address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.moody_Swap.methods.sellTokens(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.setState({ loading: false })
+      })
+    })
+  }
 
 // Mood methods
 becomeHappy = (ethAm) => {
@@ -156,16 +164,21 @@ constructor(props) {
     account: '',
     mood: {},
     moodState: '',
+    moody_Swap: {},
+    token: {},
+    tokenBalance: '0',
     happy: false,
     sad: false,
     anxious: false,
     purposeful: false,
     lonely: false,
     painfully: false,
+    ethBalance: '0'
 
   }
 }
 render() {
+
   return (
     <div>
       <Navbar />
@@ -178,6 +191,10 @@ render() {
           becomeSad = {this.becomeSad}
           moodState={this.state.moodState} 
           account={this.state.account}
+          ethBalance={this.state.ethBalance}
+          tokenBalance={this.state.tokenBalance}
+          buyTokens={this.buyTokens}
+          sellTokens={this.sellTokens}
         />
     </div>
   )
