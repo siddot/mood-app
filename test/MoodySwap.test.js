@@ -100,5 +100,32 @@ contract('MoodySwap', ([deployer, investor]) => {
       await moody_Swap.sellTokens(tokens('500'), { from: investor }).should.be.rejected;
     })
   })
+  describe("GetUniqueMood()", async ()=> {
+    let result;
+
+    before(async()=>{
+      await moody_Swap.buyTokens({ from: investor, value: web3.utils.toWei('1', 'ether')})
+      await token.approve(moody_Swap.address, tokens('20'), {from: investor})
+      result = await moody_Swap.GetUniqueMood(tokens('20'), {from: investor})
+    })
+    it('allows user to get unique mood for our MOOD tokens', async()=>{
+      let investorBalance = await token.balanceOf(investor)
+      assert.equal(investorBalance.toString(), tokens('80'))
+
+      let moodySwapBalance
+      moodySwapBalance = await token.balanceOf(moody_Swap.address)
+      assert.equal(moodySwapBalance.toString(), tokens('999920'))
+      moodySwapBalance = await web3.eth.getBalance(moody_Swap.address)
+      assert.equal(moodySwapBalance.toString(), web3.utils.toWei('1', 'Ether'))
+
+      const event = result.logs[0].args
+      assert.equal(event.account, investor)
+      assert.equal(event.token, token.address)
+      assert.equal(event.amount.toString(), tokens('20').toString())
+
+      await moody_Swap.sellTokens(tokens('500'), { from: investor }).should.be.rejected;
+
+    })
+  })
 
 })

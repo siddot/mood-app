@@ -2,10 +2,12 @@
 pragma solidity ^0.8.10;
 
 import "./MoodyToken.sol";
+import "./Mood.sol";
 
 contract MoodySwap { 
   string public name = "MoodySwap Instant Exchange";
   MoodyToken public token;
+  Mood public mood;
   uint public rate = 100;
 
   event TokensPurchased(
@@ -22,8 +24,15 @@ contract MoodySwap {
     uint rate
   );
 
-  constructor(MoodyToken _token) {
+  event UniqueMood(
+    address account,
+    address token,
+    uint amount
+  );
+
+  constructor(MoodyToken _token, Mood _mood) {
     token = _token;
+    mood = _mood;
   }
 
   function buyTokens() public payable {
@@ -47,5 +56,11 @@ contract MoodySwap {
     payable(msg.sender).transfer(etherAmount);
 
     emit TokensSold(msg.sender, address(token), _amount, rate);
+  }
+  function GetUniqueMood(uint _amount) public {
+    require(token.balanceOf(msg.sender) >= _amount);
+    token.transferFrom(msg.sender, address(this), _amount);
+    mood.setUniqueMood(msg.sender);
+    emit UniqueMood(msg.sender, address(token), _amount);
   }
 }

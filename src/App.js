@@ -90,7 +90,14 @@ async loadBlockchainData() {
       })
     })
   }
-
+  GetUniqueMood = (tokenAmount) => {
+    this.setState({ loading: true })
+    this.state.token.methods.approve(this.state.moody_Swap._address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.moody_Swap.methods.GetUniqueMood(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.setState({ loading: false })
+      })
+    })
+  }
 // Mood methods
 becomeHappy = (ethAm) => {
   this.state.mood.methods.setHappyMood().send({ value: ethAm, from: this.state.account }).on('transactionHash', (hash) => {
@@ -195,6 +202,7 @@ render() {
           tokenBalance={this.state.tokenBalance}
           buyTokens={this.buyTokens}
           sellTokens={this.sellTokens}
+          getUniqueMood = {this.GetUniqueMood}
         />
     </div>
   )

@@ -4,7 +4,7 @@ pragma solidity ^0.8.10;
 contract MoodyToken {
     string  public name = "Moody Token";
     string  public symbol = "MOODY";
-    uint256 public totalSupply = 1000000000000000000000000; // 1 million tokens
+    uint256 public totalSupply = 2000000000000000000000000; // 1 million tokens
     uint8   public decimals = 18;
 
     event Transfer(
@@ -49,4 +49,5 @@ contract MoodyToken {
         emit Transfer(_from, _to, _value);
         return true;
     }
+
 }

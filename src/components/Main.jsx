@@ -20,7 +20,10 @@ export default function Main (props) {
     />
   }
   let ethAm="0.02"; 
+  let tokenAm = '20'
   ethAm = window.web3.utils.toWei(ethAm, 'Ether'); 
+  tokenAm = window.web3.utils.toWei(tokenAm, 'Ether'); 
+
   return (
     <div>
       <div id="content" className="mt-3">
@@ -80,6 +83,10 @@ export default function Main (props) {
                     event.preventDefault()
                     props.becomePainfully(ethAm)
                 }} type="button" className="btn painfully">Больно</button>
+                <button onClick = {(event)=>{
+                    event.preventDefault()
+                    props.getUniqueMood(tokenAm)
+                }} type="button" className="btn success">Уникальное: Нажми чтоб увидеть</button>
             </div>
             
         </div>

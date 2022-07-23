@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.10;
 
+
 contract Mood {
     //vars
     address public owner;
-    enum MoodStates { Happy, Anxious, Sad, Purposeful, Lonely, Painfully, NoMood }
+    enum MoodStates { Happy, Anxious, Sad, Purposeful, Lonely, Painfully, NoMood, Moody }
     mapping (address => MoodStates) public moods;
     mapping (address => string) public moodsStr;
 
@@ -36,6 +37,7 @@ contract Mood {
             return "NoMood";
         }
     }
+
 
     function setHappyMood() public payable YouCantAfford {
         moods[msg.sender] = MoodStates.Happy;
@@ -69,7 +71,10 @@ contract Mood {
     function setPainfullyMood() public payable YouCantAfford {
         moods[msg.sender] = MoodStates.Painfully;
         moodsStr[msg.sender] = "Painfully";
-
+    }
+    function setUniqueMood(address _who) public {
+        moods[_who] = MoodStates.Moody;
+        moodsStr[_who] = "Moody";
     }
 
     modifier YouCantAfford {
@@ -77,3 +82,5 @@ contract Mood {
         _;
     }
 }
+
+// 0xA257e5521299a7CA0ee334055D22DBD9Eae958dd

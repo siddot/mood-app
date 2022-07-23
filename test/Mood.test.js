@@ -1,6 +1,7 @@
 
 const Mood = artifacts.require('Mood')
 
+
 require('chai')
   .use(require('chai-as-promised'))
   .should()
