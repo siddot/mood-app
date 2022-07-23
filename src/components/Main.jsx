@@ -20,7 +20,7 @@ export default function Main (props) {
     />
   }
   let ethAm="0.02"; 
-  let tokenAm = '20'
+  let tokenAm = '2'
   ethAm = window.web3.utils.toWei(ethAm, 'Ether'); 
   tokenAm = window.web3.utils.toWei(tokenAm, 'Ether'); 
 
