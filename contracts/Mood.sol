@@ -73,7 +73,7 @@ contract Mood {
     }
 
     modifier YouCantAfford {
-        require(msg.value == 0.02 ether, "You need to send 1 eth to set Your Mood and Get surprise");
+        require(msg.value == 0.02 ether, "You need to send 0.02 eth to set Your Mood and Get surprise");
         _;
     }
 }

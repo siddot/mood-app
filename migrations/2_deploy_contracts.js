@@ -3,6 +3,7 @@ const MoodyToken = artifacts.require("MoodyToken");
 const MoodySwap = artifacts.require("MoodySwap");
 
 module.exports = async function(deployer) {
+
   // Deploy Mood.sol
   await deployer.deploy(Mood);
   const mood = await Mood.deployed()
@@ -10,6 +11,7 @@ module.exports = async function(deployer) {
   // deploy MoodyToken.sol
   await deployer.deploy(MoodyToken);
   const token = await MoodyToken.deployed()
+
 
   // deploy MoodySwap.sol
   await deployer.deploy(MoodySwap, token.address);

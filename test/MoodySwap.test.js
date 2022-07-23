@@ -9,13 +9,13 @@ function tokens(n) {
   return web3.utils.toWei(n, 'ether');
 }
 
-contract('EthSwap', ([deployer, investor]) => {
-  let token, ethSwap
+contract('MoodySwap', ([deployer, investor]) => {
+  let token, moody_Swap
 
   before(async () => {
     token = await MoodyToken.new()
     moody_Swap = await MoodySwap.new(token.address)
-    // Transfer all tokens to EthSwap (1 million)
+    // Transfer all tokens to MoodySwap (1 million)
     await token.transfer(moody_Swap.address, tokens('1000000'))
   })
 
